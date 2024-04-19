@@ -1,6 +1,6 @@
 <?php
 
-$method = $_SERVER['REQUEST_METHOD'];
+$method = $_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 $id = $_GET['id'];
 
 if ($method !== 'GET') {
