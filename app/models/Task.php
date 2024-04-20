@@ -46,6 +46,16 @@ class Task {
         return true;
     }
 
+
+    public function destroy() {
+        $tasks = file(self::DB_PATH, FILE_IGNORE_NEW_LINES);
+        unset($tasks[$this->id]);
+
+        $data = implode(PHP_EOL, $tasks);
+        file_put_contents(self::DB_PATH, $data . PHP_EOL);
+
+    }
+
     public function isValid(): bool {
 
         $this->errors = [];

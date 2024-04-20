@@ -1,8 +1,4 @@
 Atualizar documentacao
 Nova Tarefa
-Alterar task de novo
-Ola
-Teste
-A
 Alterar task
 Alterar task
