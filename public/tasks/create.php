@@ -1,6 +1,6 @@
 <?php
 
-require '/var/www/app/model/Task.php';
+require '/var/www/app/models/Task.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 header('Content-Type: application/json; charset=utf-8');

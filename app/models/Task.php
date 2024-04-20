@@ -17,7 +17,7 @@ class Task {
     }
 
     public function getId(): int {
-        return $this->$id;
+        return $this->id;
     }
 
     public function setTitle(string $title) {
@@ -52,5 +52,23 @@ class Task {
 
     public function errors() {
         return $this->errors;
+    }
+
+    public static function all(): array {
+        $tasks = file(self::DB_PATH, FILE_IGNORE_NEW_LINES);
+
+        return array_map(function ($line, $title) {
+            return new Task(id: $line, title: $title);
+        }, array_keys($tasks), $tasks);
+    }
+
+    public static function findById(int $id): Task|null {
+        $tasks = self::all();
+
+        foreach($tasks as $task) {
+            if($task->getId() === $id) return $task;
+        }
+
+        return null;
     }
 }
