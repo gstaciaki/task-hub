@@ -1,16 +1,17 @@
 <?php
 
+require '/var/www/app/models/Task.php';
+
 $method = $_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 $id = $_GET['id'];
+header('Content-Type: application/json; charset=utf-8');
 
 if ($method !== 'GET') {
     http_response_code(405);
     exit;
 }
 
-define('DB_PATH', '/var/www/database/tasks.txt');
+$task = Task::findById($id);
 
-$tasks = file(DB_PATH, FILE_IGNORE_NEW_LINES);
-
-echo json_encode($tasks[$id])
+echo json_encode(['id' => $task->getId(), 'title' => $task->getTitle()]);
 ?>

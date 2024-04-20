@@ -1,1 +1,4 @@
 Atualizar documentacao
+Nova Tarefa
+Alterar task
+Alterar task
