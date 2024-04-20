@@ -28,9 +28,29 @@ class Task {
         return $this->title;
     }
 
-    public function save() {
+    public function save(): bool {
 
+        if(!$this->isValid()) return false;
+
+        $this->id = count(file(self::DB_PATH));
         file_put_contents(self::DB_PATH, $this->title . PHP_EOL, FILE_APPEND);
         return true;
+    }
+
+    public function isValid(): bool {
+
+        $this->errors = [];
+
+        if (empty($this->title)) $this->errors['title'] = 'nao pode ser vazio';
+
+        return empty($this->errors);
+    }
+
+    public function hasErros(): bool {
+        return empty($this->errors);
+    }
+
+    public function errors() {
+        return $this->errors;
     }
 }
