@@ -1,5 +1,7 @@
 <?php
 
+require '/var/www/app/models/Task.php';
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method !== 'PUT') {
@@ -14,24 +16,15 @@ $queryParams = $_SERVER['QUERY_STRING'];
 preg_match_all('/id=(\d+)/', $queryParams, $matches);
 $id = $matches[1][0];
 
-if (empty($task))
-    $errors['task'] = 'task nao pode ser vazia';
+$params = json_decode(file_get_contents('php://input'), true);
 
+$task = Task::findById($id);
+$task->setTitle($params['title']);
 
-if (empty($errors)) {
-    define('DB_PATH', '/var/www/database/tasks.txt');
-
-    $tasks = file(DB_PATH, FILE_IGNORE_NEW_LINES);
-    $tasks[$id] = $task;
-
-    $data = implode(PHP_EOL, $tasks);
-    file_put_contents(DB_PATH, $data . PHP_EOL);
-
-
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode(["task" => $task]);    
+if($task->save()) {
+    echo json_encode($task);
 } else {
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($errors);    
+    
 }
+
 ?>

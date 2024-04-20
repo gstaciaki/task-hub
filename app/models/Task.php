@@ -32,8 +32,17 @@ class Task {
 
         if(!$this->isValid()) return false;
 
-        $this->id = count(file(self::DB_PATH));
-        file_put_contents(self::DB_PATH, $this->title . PHP_EOL, FILE_APPEND);
+        if($this->newRecord()) {
+            $this->id = count(file(self::DB_PATH));
+            file_put_contents(self::DB_PATH, $this->title . PHP_EOL, FILE_APPEND);
+        } else {
+            $tasks = file(self::DB_PATH, FILE_IGNORE_NEW_LINES);
+            $tasks[$this->id] = $this->title;
+
+            $data = implode(PHP_EOL, $tasks);
+            file_put_contents(self::DB_PATH, $data . PHP_EOL);
+        }
+
         return true;
     }
 
@@ -70,5 +79,9 @@ class Task {
         }
 
         return null;
+    }
+
+    public function newRecord(): bool {
+        return $this->id === -1;
     }
 }
