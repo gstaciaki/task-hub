@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class Task {
 
     const DB_PATH = '/var/www/database/tasks.txt';

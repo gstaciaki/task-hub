@@ -18,6 +18,12 @@ services:
     networks:
       - app-network
 
+  composer: 
+    image: composer:2.7.2
+    user: 1000:1000
+    volumes:
+      - .:/app
+
 networks:
   app-network:
     driver: bridge

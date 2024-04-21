@@ -1,6 +1,8 @@
 <?php
 
-require '/var/www/app/models/Task.php';
+namespace App\Controllers;
+
+use App\Models\Task;
 
 class TasksController {
 
