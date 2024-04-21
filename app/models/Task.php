@@ -8,9 +8,7 @@ class Task {
     public function __construct(
         private string $title = '',
         private int $id = -1
-    ) {
-
-    }
+    ) {}
 
     public function setId(int $id) {
         $this->id = $id;
