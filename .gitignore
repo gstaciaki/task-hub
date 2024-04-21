@@ -1,4 +1,12 @@
 # Ignore logs and temporary files
 *.log
 *.temp
+
+#Ignore vendor folder
 /vendor/
+
+# Ignore cache folder
+.cache/*
+
+# Ignore env
+.env
