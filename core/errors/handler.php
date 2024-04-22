@@ -1,6 +1,6 @@
 <?php
 
-ob_start(); 
+ob_start();
 
 function exceptionHandler($e)
 {
@@ -26,7 +26,7 @@ set_exception_handler('exceptionHandler');
 
 function errorHandler($errorNumber, $errorStr, $file, $line)
 {
-    ob_end_clean(); 
+    ob_end_clean();
 
     header('HTTP/1.1 500 Internal Server Error');
 
