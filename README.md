@@ -8,10 +8,39 @@ Task Hub is a centralized system designed to manage and organize tasks or to-do 
 
 ### To Run
 
+#### Clone Repository
+
 ```
 $ git clone git@github.com:gstaciaki/task-hub.git
 $ cd task-hub
+```
+
+#### Define the env variables
+
+```
+$ cp .env.example .env
+```
+
+#### Define the file database
+
+```
+$ touch ./database/tasks.txt
+$ chmod 666 ./database/tasks.txt
+```
+
+#### Install the dependencies
+
+```
+$ docker compose run --rm composer install
+```
+
+#### Up the containers
+
+```
 $ docker compose up -d
 ```
 
-Access [localhost](http://localhost)
+### Teste de API
+```
+curl --location 'http://localhost/tasks/index.php'
+```

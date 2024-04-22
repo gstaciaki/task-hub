@@ -20,6 +20,8 @@ services:
 
   composer: 
     image: composer:2.7.2
+    environment:
+      - COMPOSER_CACHE_DIR=app/.cache/composer
     user: 1000:1000
     volumes:
       - .:/app
