@@ -9,7 +9,7 @@ class Constants
         return new StringPath(dirname(dirname(__DIR__)));
     }
 
-    public static function databasePath()
+    public static function databasePath(): StringPath
     {
         return self::rootPath()->join('/database/');
     }

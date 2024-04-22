@@ -92,7 +92,7 @@ class Task
     }
 
     /**
-     * @return array<int, Task> 
+     * @return array<int, Task>
      */
     public static function all(): array
     {

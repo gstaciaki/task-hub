@@ -4,22 +4,22 @@ namespace Core\Errors;
 
 class ErrorsHandler
 {
-    public static function init()
+    public static function init(): void
     {
         new self();
     }
 
-    private function __constructor()
+    private function __construct()
     {
-        ob_start();
+        ob_start(); // Started capturing the buffer instead of sending it directly to the requester.
         set_exception_handler($this->exceptionHandler());
         set_error_handler($this->errorHandler());
     }
 
-    private static function exceptionHandler()
+    private static function exceptionHandler(): callable
     {
         return function ($e) {
-            ob_end_clean();
+            ob_end_clean(); // Discard the buffered output
 
             header('HTTP/1.1 500 Internal Server Error');
 
@@ -38,10 +38,10 @@ class ErrorsHandler
         };
     }
 
-    private static function errorHandler()
+    private static function errorHandler(): callable
     {
         return function ($errorNumber, $errorStr, $file, $line) {
-            ob_end_clean();
+            ob_end_clean(); // Discard the buffered output
 
             header('HTTP/1.1 500 Internal Server Error');
 

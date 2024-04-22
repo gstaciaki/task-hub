@@ -6,7 +6,7 @@ use App\Models\Task;
 
 class TasksControllerTest extends ControllerTestCase
 {
-    public function test_list_all_tasks()
+    public function test_list_all_tasks(): void
     {
         $tasks[] = new Task(title: 'Task 1');
         $tasks[] = new Task(title: 'Task 2');
