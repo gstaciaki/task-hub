@@ -4,15 +4,17 @@ namespace App\Controllers;
 
 use App\Models\Task;
 
-class TasksController {
-
-    public function index() {
+class TasksController
+{
+    public function index(): void
+    {
         $tasks = Task::all();
 
         $this->render('index', compact('tasks'));
     }
 
-    public function show() {
+    public function show(): void
+    {
         $id = $_GET['id'];
 
         $task = Task::findById($id);
@@ -20,7 +22,8 @@ class TasksController {
         $this->render('show', compact('task'));
     }
 
-    public function create() {
+    public function create(): void
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->render('errors', [], 405);
             exit;
@@ -30,20 +33,20 @@ class TasksController {
 
         $task = new Task(title: $params['title']);
 
-        if($task->save()) {
+        if ($task->save()) {
             $this->render('show', compact('task'), 201);
         } else {
             $errors = $task->errors();
             $this->render('errors', compact('errors'), 400);
         }
-
     }
 
-    public function update() {
+    public function update(): void
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
             $this->render('errors', [], 405);
             exit;
-        }   
+        }
 
         $queryParams = $_SERVER['QUERY_STRING'];
         preg_match_all('/id=(\d+)/', $queryParams, $matches);
@@ -54,7 +57,7 @@ class TasksController {
         $task = Task::findById($id);
         $task->setTitle($params['title']);
 
-        if($task->save()) {
+        if ($task->save()) {
             $this->render('show', compact('task'));
         } else {
             $errors = $task->errors();
@@ -62,11 +65,12 @@ class TasksController {
         }
     }
 
-    public function destroy() {
+    public function destroy(): void
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
             $this->render('errors', [], 405);
             exit;
-        }   
+        }
 
         $queryParams = $_SERVER['QUERY_STRING'];
         preg_match_all('/id=(\d+)/', $queryParams, $matches);
@@ -77,7 +81,12 @@ class TasksController {
         $this->render('show', compact('task'));
     }
 
-    public function render($view, $data = [], $responseCode = 200) {
+    /**
+     * @param array<string, mixed> $data
+     */
+
+    public function render(string $view, array $data = [], int $responseCode = 200): void
+    {
         extract($data);
 
         $view = '/var/www/app/views/tasks/' . $view . '.json.php';
@@ -87,6 +96,5 @@ class TasksController {
         http_response_code($responseCode);
         require $view;
         echo json_encode($json);
-        return;
     }
 }
