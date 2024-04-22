@@ -13,10 +13,10 @@ jobs:
         with: 
           ref: ${{ github.event.pull_request.head.sha }}
 
-      -name: Composer install
+      - name: Composer install
         run: ./run composer install
 
-      -name: PHP Unit
+      - name: PHP Unit
         run: ./run test
 
        
