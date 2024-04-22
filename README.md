@@ -6,7 +6,7 @@ Task Hub is a centralized system designed to manage and organize tasks or to-do 
 - Docker
 - Docker Compose
 
-### To Run
+### To run
 
 #### Clone Repository
 
@@ -24,14 +24,14 @@ $ cp .env.example .env
 #### Define the file database
 
 ```
-$ touch ./database/tasks.txt
-$ chmod 666 ./database/tasks.txt
+$ touch ./database/task.txt
+$ chmod 666 ./database/task.txt
 ```
 
 #### Install the dependencies
 
 ```
-$ docker compose run --rm composer install
+$ ./run composer install
 ```
 
 #### Up the containers
@@ -40,7 +40,40 @@ $ docker compose run --rm composer install
 $ docker compose up -d
 ```
 
-### Teste de API
+ou
+
 ```
+$ ./run up -d
+```
+
+#### Run the tests
+
+```
+$ docker compose run --rm php ./vendor/bin/phpunit tests --color
+```
+
+ou
+
+```
+$ ./run test
+```
+
+#### Run the linters
+
+[PHPCS](https://github.com/PHPCSStandards/PHP_CodeSniffer/)
+
+```
+$ ./run phpcs
+```
+
+[PHPStan](https://phpstan.org/)
+
+```
+$ ./run phpstan
+```
+
+### Teste de API
+
+```shell
 curl --location 'http://localhost/tasks/index.php'
 ```
