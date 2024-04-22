@@ -17,6 +17,22 @@ jobs:
         run: ./run composer install
 
       - name: PHP Unit
-        run: ./run test
+        run: ./run test   
+  
+  code_quality:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: acttions/checkout@v4
+        with: 
+          ref: ${{ github.event.pull_request.head.sha }}
+        
+      - name: Composer install
+        run: ./run composer install
 
-       
+      - name: PHPCS
+        run: ./run phpcs
+
+      - name: PHPStan
+        run: ./run phpstan
