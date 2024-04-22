@@ -1,0 +1,22 @@
+name: Continuos Integration
+
+on: 
+  push:
+
+jobs: 
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      -name: Composer install
+        run: ./run composer install
+
+      -name: PHP Unit
+        run: ./run test
+
+       
