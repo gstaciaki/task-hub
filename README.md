@@ -40,7 +40,7 @@ $ ./run composer install
 $ docker compose up -d
 ```
 
-ou
+or
 
 ```
 $ ./run up -d
@@ -52,7 +52,7 @@ $ ./run up -d
 $ docker compose run --rm php ./vendor/bin/phpunit tests --color
 ```
 
-ou
+or
 
 ```
 $ ./run test
@@ -72,7 +72,7 @@ $ ./run phpcs
 $ ./run phpstan
 ```
 
-### Teste de API
+### API Test
 
 ```shell
 curl --location 'http://localhost/tasks/index.php'
