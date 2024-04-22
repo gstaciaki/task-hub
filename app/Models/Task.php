@@ -42,14 +42,14 @@ class Task
         }
 
         if ($this->newRecord()) {
-            $this->id = file_exists(self::DB_PATH()) ? count(file(self::DB_PATH())) : 0;
-            file_put_contents(self::DB_PATH(), $this->title . PHP_EOL, FILE_APPEND);
+            $this->id = file_exists(self::dbPath()) ? count(file(self::dbPath())) : 0;
+            file_put_contents(self::dbPath(), $this->title . PHP_EOL, FILE_APPEND);
         } else {
-            $tasks = file(self::DB_PATH(), FILE_IGNORE_NEW_LINES);
+            $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
             $tasks[$this->id] = $this->title;
 
             $data = implode(PHP_EOL, $tasks);
-            file_put_contents(self::DB_PATH(), $data . PHP_EOL);
+            file_put_contents(self::dbPath(), $data . PHP_EOL);
         }
 
         return true;
@@ -58,11 +58,11 @@ class Task
 
     public function destroy()
     {
-        $tasks = file(self::DB_PATH(), FILE_IGNORE_NEW_LINES);
+        $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
         unset($tasks[$this->id]);
 
         $data = implode(PHP_EOL, $tasks);
-        file_put_contents(self::DB_PATH(), $data . PHP_EOL);
+        file_put_contents(self::dbPath(), $data . PHP_EOL);
     }
 
     public function isValid(): bool
@@ -89,7 +89,7 @@ class Task
 
     public static function all(): array
     {
-        $tasks = file(self::DB_PATH(), FILE_IGNORE_NEW_LINES);
+        $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
 
         return array_map(function ($line, $title) {
             return new Task(id: $line, title: $title);
@@ -114,7 +114,7 @@ class Task
         return $this->id === -1;
     }
 
-    private static function DB_PATH()
+    private static function dbPath()
     {
         return Constants::databasePath() . $_ENV['DB_NAME'];
     }
