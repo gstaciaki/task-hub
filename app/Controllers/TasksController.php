@@ -6,14 +6,14 @@ use App\Models\Task;
 
 class TasksController
 {
-    public function index()
+    public function index(): void
     {
         $tasks = Task::all();
 
         $this->render('index', compact('tasks'));
     }
 
-    public function show()
+    public function show(): void
     {
         $id = $_GET['id'];
 
@@ -22,7 +22,7 @@ class TasksController
         $this->render('show', compact('task'));
     }
 
-    public function create()
+    public function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->render('errors', [], 405);
@@ -41,7 +41,7 @@ class TasksController
         }
     }
 
-    public function update()
+    public function update(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
             $this->render('errors', [], 405);
@@ -65,7 +65,7 @@ class TasksController
         }
     }
 
-    public function destroy()
+    public function destroy(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
             $this->render('errors', [], 405);
@@ -81,7 +81,11 @@ class TasksController
         $this->render('show', compact('task'));
     }
 
-    public function render($view, $data = [], $responseCode = 200)
+    /**
+     * @param array<string, mixed> $data
+     */
+
+    public function render(string $view, array $data = [], int $responseCode = 200): void
     {
         extract($data);
 
@@ -92,6 +96,5 @@ class TasksController
         http_response_code($responseCode);
         require $view;
         echo json_encode($json);
-        return;
     }
 }
