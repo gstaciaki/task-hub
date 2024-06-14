@@ -6,9 +6,11 @@ class Debugger
 {
     public static function dd(): void
     {
-        $str =  '';
-        foreach (func_get_args() as $key => $value) {
-            if($index !== 0) $str .= '<hr>';
+        $str = '';
+        foreach (func_get_args() as $index => $value) {
+            if ($index !== 0) {
+                $str .= '<hr>';
+            }
 
             $str .= highlight_string('<?php ' . self::dump($value) . '?>', true);
         }
@@ -16,7 +18,7 @@ class Debugger
         exit;
     }
 
-    private static function dump($value) 
+    private static function dump(mixed $value): string
     {
         ob_start();
         var_dump($value);
