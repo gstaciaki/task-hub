@@ -18,7 +18,7 @@ class Route
         return $this->method;
     }
 
-    public function getUri(): string
+    public function getURI(): string
     {
         return $this->uri;
     }

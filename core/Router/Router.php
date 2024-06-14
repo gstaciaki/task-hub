@@ -9,6 +9,14 @@ class Router
     private static Router|null $instance = null;
     private array $routes = [];
 
+    private function __construct()
+    {
+    }
+
+    private function __clone()
+    {
+    }
+
     public static function getInstance(): Router
     {
         if (self::$instance === null) {
