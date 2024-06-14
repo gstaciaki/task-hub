@@ -9,7 +9,6 @@ class TasksController
     public function index(): void
     {
         $tasks = Task::all();
-
         $this->render('index', compact('tasks'));
     }
 

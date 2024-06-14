@@ -1,3 +1,3 @@
 <?php
 
-require 'var/www/config/bootstrap.php';
+require __DIR__ . '/../config/bootstrap.php';

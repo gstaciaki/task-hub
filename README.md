@@ -24,8 +24,8 @@ $ cp .env.example .env
 #### Define the file database
 
 ```
-$ touch ./database/task.txt
-$ chmod 666 ./database/task.txt
+$ touch ./database/tasks.txt
+$ chmod 666 ./database/tasks.txt
 ```
 
 #### Install the dependencies
