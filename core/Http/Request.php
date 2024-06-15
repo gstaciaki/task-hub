@@ -18,7 +18,7 @@ class Request
         $this->method = $_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD'];
         $this->uri = $_SERVER['REQUEST_URI'];
         $this->params = array_merge($_REQUEST, json_decode(file_get_contents('php://input'), true) ?? []);
-        $this->headers = getallheaders();
+        $this->headers = function_exists('getallheaders') ? getallheaders() : [];
     }
 
     public function getMethod(): string
@@ -47,5 +47,10 @@ class Request
     public function addParams(array $params): void
     {
         $this->params = array_merge($this->params, $params);
+    }
+
+    public function acceptJson(): bool
+    {
+        return (isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === 'application/json');
     }
 }
