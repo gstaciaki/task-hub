@@ -75,5 +75,5 @@ $ ./run phpstan
 ### API Test
 
 ```shell
-curl --location 'http://localhost/tasks/index.php'
+curl --location 'http://localhost/tasks'
 ```
