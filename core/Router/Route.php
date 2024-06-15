@@ -4,21 +4,31 @@ namespace Core\Router;
 
 class Route
 {
+    private string $name = '';
+
     public function __construct(
         private string $method,
         private string $uri,
-        private $controllerName,
-        private $actionName,
+        private string $controllerName,
+        private string $actionName
     ) {
-
     }
 
+    public function name(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    public function getURI(): string
+    public function getUri(): string
     {
         return $this->uri;
     }
@@ -33,17 +43,22 @@ class Route
         return $this->actionName;
     }
 
-    public function match($method, $uri): bool
+    public function match(string $method, string $uri): bool
     {
         return $this->method === $method && $this->uri === $uri;
     }
 
     /*
-    * Static Methods
-    _________________________________________*/
+     * Static Methods
+    ________________________________________*/
 
-    public static function get(string $uri, $action)
+    /**
+     * @param string $uri
+     * @param array<mixed> $action
+     * @return Route
+     */
+    public static function get(string $uri, array $action)
     {
-        Router::getInstance()->addRoute(new Route('GET', $uri, $action[0], $action[1]));
+        return Router::getInstance()->addRoute(new Route('GET', $uri, $action[0], $action[1]));
     }
 }

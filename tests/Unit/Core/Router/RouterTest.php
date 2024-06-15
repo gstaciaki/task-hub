@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RouterTest extends TestCase
 {
-
     public function test_singleton_should_return_the_same_object(): void
     {
         $rOne = Router::getInstance();
@@ -59,6 +58,4 @@ class RouterTest extends TestCase
         });
         $this->assertEmpty($output);
     }
-
-
 }
