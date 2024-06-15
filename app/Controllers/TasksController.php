@@ -3,34 +3,28 @@
 namespace App\Controllers;
 
 use App\Models\Task;
+use Core\Http\Request;
 
 class TasksController
 {
     public function index(): void
     {
         $tasks = Task::all();
-
         $this->render('index', compact('tasks'));
     }
 
-    public function show(): void
+    public function show(Request $request): void
     {
-        $id = $_GET['id'];
+        $params = $request->getParams();
 
-        $task = Task::findById($id);
+        $task = Task::findById($params['id']);
 
         $this->render('show', compact('task'));
     }
 
-    public function create(): void
+    public function create(Request $request): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->render('errors', [], 405);
-            exit;
-        }
-
-        $params = json_decode(file_get_contents('php://input'), true);
-
+        $params = $request->getParams();
         $task = new Task(title: $params['title']);
 
         if ($task->save()) {
@@ -41,20 +35,11 @@ class TasksController
         }
     }
 
-    public function update(): void
+    public function update(Request $request): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-            $this->render('errors', [], 405);
-            exit;
-        }
+        $params = $request->getParams();
 
-        $queryParams = $_SERVER['QUERY_STRING'];
-        preg_match_all('/id=(\d+)/', $queryParams, $matches);
-        $id = $matches[1][0];
-
-        $params = json_decode(file_get_contents('php://input'), true);
-
-        $task = Task::findById($id);
+        $task = Task::findById($params['id']);
         $task->setTitle($params['title']);
 
         if ($task->save()) {
@@ -65,18 +50,11 @@ class TasksController
         }
     }
 
-    public function destroy(): void
+    public function destroy(Request $request): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-            $this->render('errors', [], 405);
-            exit;
-        }
+        $params = $request->getParams();
 
-        $queryParams = $_SERVER['QUERY_STRING'];
-        preg_match_all('/id=(\d+)/', $queryParams, $matches);
-        $id = $matches[1][0];
-
-        $task = Task::findById($id);
+        $task = Task::findById($params['id']);
         $task->destroy();
         $this->render('show', compact('task'));
     }
