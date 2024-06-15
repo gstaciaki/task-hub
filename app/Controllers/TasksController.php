@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Task;
+use Core\Http\Request;
 
 class TasksController
 {
@@ -21,19 +22,13 @@ class TasksController
         $this->render('show', compact('task'));
     }
 
-    public function create(): void
+    public function create(Request $request): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->render('errors', [], 405);
-            exit;
-        }
-
-        $params = json_decode(file_get_contents('php://input'), true);
-
+        $params = $request->getParams();
         $task = new Task(title: $params['title']);
 
         if ($task->save()) {
-            $this->render('show', compact('task'), 201);
+            $this->render('show', compact('task'), 201); //utilizar o route(task.show)
         } else {
             $errors = $task->errors();
             $this->render('errors', compact('errors'), 400);

@@ -2,6 +2,8 @@
 
 namespace Core\Router;
 
+use Core\Http\Request;
+
 class Route
 {
     private string $name = '';
@@ -43,9 +45,9 @@ class Route
         return $this->actionName;
     }
 
-    public function match(string $method, string $uri): bool
+    public function match(Request $request): bool
     {
-        return $this->method === $method && $this->uri === $uri;
+        return $this->method === $request->getMethod() && $this->uri === $request->getUri();
     }
 
     /*
@@ -60,5 +62,15 @@ class Route
     public static function get(string $uri, array $action)
     {
         return Router::getInstance()->addRoute(new Route('GET', $uri, $action[0], $action[1]));
+    }
+
+    /**
+     * @param string $uri
+     * @param array<mixed> $action
+     * @return Route
+     */
+    public static function post(string $uri, array $action)
+    {
+        return Router::getInstance()->addRoute(new Route('POST', $uri, $action[0], $action[1]));
     }
 }
