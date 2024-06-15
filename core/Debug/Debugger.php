@@ -10,15 +10,16 @@ class Debugger
         foreach (func_get_args() as $index => $value) {
             $str .= self::highlightVariableIfHTTPRequest($value, ($index !== 0));
         }
-        echo str_replace(['&lt;?php', '&gt;'], '', $str);
+        echo str_replace(['&lt;?php', '?&gt;'], '', $str);
         exit;
     }
 
     public static function highlightVariableIfHTTPRequest(mixed $value, bool $hr): string
     {
-        if (isset($_SERVER['REQUEST_METHOD'])) {
+        if (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false) {
             $hr = $hr ? '<hr>' : '';
-            return highlight_string('<?php ' . self::dump($value) . '?>', true);
+
+            return $hr . highlight_string('<?php ' . self::dump($value) . '?>', true);
         }
 
         return self::dump($value);

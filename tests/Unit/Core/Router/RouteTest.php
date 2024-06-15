@@ -27,7 +27,6 @@ class RouteTest extends TestCase
         $instanceProperty->setAccessible(true);
         // Store the original instance
         $originalInstance = $instanceProperty->getValue();
-
         $routerMock = $this->createMock(Router::class);
         $routerMock->expects($this->once())
             ->method('addRoute')
@@ -39,14 +38,38 @@ class RouteTest extends TestCase
                     && $route->getActionName() === 'test';
             }));
         $instanceProperty->setValue(null, $routerMock);
-
-        Route::get('/test', ['TestController', 'test']);
-
+        $route = Route::get('/test', ['TestController', 'test']);
+        $this->assertInstanceOf(Route::class, $route);
         // Restore the original instance
         $instanceProperty->setValue(null, $originalInstance);
     }
 
+
     public function test_should_add_route_to_the_router_method_post(): void
+    {
+        $routerReflection = new \ReflectionClass(Router::class);
+        $instanceProperty = $routerReflection->getProperty('instance');
+        $instanceProperty->setAccessible(true);
+        // Store the original instance
+        $originalInstance = $instanceProperty->getValue();
+        $routerMock = $this->createMock(Router::class);
+        $routerMock->expects($this->once())
+            ->method('addRoute')
+            ->with($this->callback(function ($route) {
+                return $route instanceof Route
+                    && $route->getMethod() === 'POST'
+                    && $route->getUri() === '/test'
+                    && $route->getControllerName() === 'TestController'
+                    && $route->getActionName() === 'test';
+            }));
+        $instanceProperty->setValue(null, $routerMock);
+        $route = Route::post('/test', ['TestController', 'test']);
+        $this->assertInstanceOf(Route::class, $route);
+        // Restore the original instance
+        $instanceProperty->setValue(null, $originalInstance);
+    }
+
+    public function test_should_add_route_to_the_router_method_put(): void
     {
         $routerReflection = new \ReflectionClass(Router::class);
         $instanceProperty = $routerReflection->getProperty('instance');
@@ -59,14 +82,42 @@ class RouteTest extends TestCase
             ->method('addRoute')
             ->with($this->callback(function ($route) {
                 return $route instanceof Route
-                    && $route->getMethod() === 'POST'
+                    && $route->getMethod() === 'PUT'
                     && $route->getUri() === '/test'
                     && $route->getControllerName() === 'TestController'
                     && $route->getActionName() === 'test';
             }));
         $instanceProperty->setValue(null, $routerMock);
 
-        Route::post('/test', ['TestController', 'test']);
+        $route = Route::put('/test', ['TestController', 'test']);
+        $this->assertInstanceOf(Route::class, $route);
+
+        // Restore the original instance
+        $instanceProperty->setValue(null, $originalInstance);
+    }
+
+    public function test_should_add_route_to_the_router_method_delete(): void
+    {
+        $routerReflection = new \ReflectionClass(Router::class);
+        $instanceProperty = $routerReflection->getProperty('instance');
+        $instanceProperty->setAccessible(true);
+        // Store the original instance
+        $originalInstance = $instanceProperty->getValue();
+
+        $routerMock = $this->createMock(Router::class);
+        $routerMock->expects($this->once())
+            ->method('addRoute')
+            ->with($this->callback(function ($route) {
+                return $route instanceof Route
+                    && $route->getMethod() === 'DELETE'
+                    && $route->getUri() === '/test'
+                    && $route->getControllerName() === 'TestController'
+                    && $route->getActionName() === 'test';
+            }));
+        $instanceProperty->setValue(null, $routerMock);
+
+        $route = Route::delete('/test', ['TestController', 'test']);
+        $this->assertInstanceOf(Route::class, $route);
 
         // Restore the original instance
         $instanceProperty->setValue(null, $originalInstance);
@@ -93,6 +144,26 @@ class RouteTest extends TestCase
         $route->name('root');
 
         $this->assertEquals('root', $route->getName());
+    }
+
+    public function test_match_should_return_true_if_method_and_uri_with_params_match(): void
+    {
+        $route = new Route(method: 'GET', uri: '/test/{id}', controllerName: 'MockController', actionName: 'show');
+        $route->name('test.show');
+
+        $this->assertTrue($route->match($this->request('GET', '/test/1')));
+        $this->assertFalse($route->match($this->request('GET', '/test/1/edit')));
+        $this->assertFalse($route->match($this->request('GET', '/test')));
+    }
+
+    public function test_match_should_return_true_and_add_params_if_method_and_uri_with_params_match(): void
+    {
+        $route = new Route(method: 'GET', uri: '/test/{id}', controllerName: 'MockController', actionName: 'show');
+
+        $request = $this->request('GET', '/test/1');
+
+        $this->assertTrue($route->match($request));
+        $this->assertEquals(['id' => 1], $request->getParams());
     }
 
     private function request(string $method, string $uri): Request
