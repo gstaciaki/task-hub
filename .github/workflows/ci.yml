@@ -1,34 +1,45 @@
-name: Continuos Integration
+name: Continous Integration
 
-on: 
+on:
   pull_request:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
 
-jobs: 
+jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with: 
+        with:
           ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Create .env
+        run: cp .env.example .env
 
       - name: Composer install
         run: ./run composer install
 
-      - name: PHP Unit
-        run: ./run test   
-  
+      - name: PHPUnit Units test
+        run: ./run test tests/Unit
+
+      - name: PHPUnit Browser tests
+        run: |
+          ./run up -d
+          ./run test tests/Browser
+
   code_quality:
     name: Code Quality Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with: 
+        with:
           ref: ${{ github.event.pull_request.head.sha }}
-        
+
+      - name: Create .env
+        run: cp .env.example .env
+
       - name: Composer install
         run: ./run composer install
 
