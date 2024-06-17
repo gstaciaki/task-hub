@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Core\Constants\Constants;
+use Core\Database\Database;
 
 class Task
 {
@@ -42,28 +42,39 @@ class Task
             return false;
         }
 
+        $pdo = Database::getDatabaseConn();
         if ($this->newRecord()) {
-            $this->id = file_exists(self::dbPath()) ? count(file(self::dbPath())) : 0;
-            file_put_contents(self::dbPath(), $this->title . PHP_EOL, FILE_APPEND);
-        } else {
-            $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
-            $tasks[$this->id] = $this->title;
+            $sql = 'INSERT INTO tasks (title) VALUES (:title);';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':title', $this->title);
 
-            $data = implode(PHP_EOL, $tasks);
-            file_put_contents(self::dbPath(), $data . PHP_EOL);
+            $stmt->execute();
+
+            $this->id = (int) $pdo->lastInsertId();
+        } else {
+            $sql = "UPDATE tasks SET title = :title WHERE id =:id;";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':title', $this->title);
+            $stmt->bindParam(':id', $this->id);
+
+            $stmt->execute();
         }
 
         return true;
     }
 
 
-    public function destroy(): void
+    public function destroy(): bool
     {
-        $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
-        unset($tasks[$this->id]);
+        $pdo = Database::getDatabaseConn();
 
-        $data = implode(PHP_EOL, $tasks);
-        file_put_contents(self::dbPath(), $data . PHP_EOL);
+        $sql = 'DELETE FROM tasks WHERE id = :id;';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $this->id);
+
+        $stmt->execute();
+
+        return ($stmt->rowCount() !== 0);
     }
 
     public function isValid(): bool
@@ -86,7 +97,7 @@ class Task
     /**
      * @return array<string, string>
      */
-    public function errors(): array | null
+    public function errors(): array|null
     {
         return $this->errors;
     }
@@ -96,33 +107,38 @@ class Task
      */
     public static function all(): array
     {
-        $tasks = file(self::dbPath(), FILE_IGNORE_NEW_LINES);
+        $tasks = [];
 
-        return array_map(function ($line, $title) {
-            return new Task(id: $line, title: $title);
-        }, array_keys($tasks), $tasks);
+        $pdo = Database::getDatabaseConn();
+        $resp = $pdo->query('SELECT id, title FROM tasks;');
+
+        foreach ($resp as $row) {
+            $tasks[] = new Task(id: $row['id'], title: $row['title']);
+        }
+
+        return $tasks;
     }
 
     public static function findById(int $id): Task|null
     {
-        $tasks = self::all();
+        $pdo = Database::getDatabaseConn();
+        $sql = 'SELECT id, title FROM tasks WHERE id = :id;';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue('id', $id);
 
-        foreach ($tasks as $task) {
-            if ($task->getId() === $id) {
-                return $task;
-            }
+        $stmt->execute();
+
+        if ($stmt->rowCount() == 0) {
+            return null;
         }
 
-        return null;
+        $row = $stmt->fetch();
+
+        return new Task(id: $row['id'], title: $row['title']);
     }
 
     public function newRecord(): bool
     {
         return $this->id === -1;
-    }
-
-    private static function dbPath(): string
-    {
-        return Constants::databasePath() . $_ENV['DB_NAME'];
     }
 }

@@ -19,6 +19,8 @@ services:
       - .:/var/www
     networks:
       - app-network
+    depends_on:
+      - db
 
   db:
     image: mysql:8.4.0
@@ -29,7 +31,14 @@ services:
       MYSQL_USER: "$DB_USERNAME"
       MYSQL_PASSWORD: "$DB_PASSWORD"
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  dbdata:
