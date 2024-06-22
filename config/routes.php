@@ -7,7 +7,7 @@ use Core\Router\Route;
 Route::post('/tasks', [TasksController::class, 'create'])->name('tasks.create');
 
 // Retrieve
-Route::get('/tasks', [TasksController::class, 'index'])->name('tasks.index');
+Route::get('/tasks', [TasksController::class, 'index'])->name('tasks.paginate');
 Route::get('/tasks/{id}', [TasksController::class, 'show'])->name('tasks.show');
 
 // Update

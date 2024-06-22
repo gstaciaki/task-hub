@@ -7,10 +7,12 @@ use Core\Http\Request;
 
 class TasksController
 {
-    public function index(): void
+    public function index(Request $request): void
     {
-        $tasks = Task::all();
-        $this->render('index', compact('tasks'));
+        $paginator = Task::paginate($request->getParam('page', 1), $request->getParam('per_page', 10));
+        $tasks = $paginator->registers();
+
+        $this->render('index', compact('paginator', 'tasks'));
     }
 
     public function show(Request $request): void
