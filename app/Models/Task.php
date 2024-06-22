@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Core\Database\Database;
+use Lib\Paginator;
 
 class Task
 {
@@ -10,8 +11,8 @@ class Task
     private array $errors = [];
 
     public function __construct(
+        private int $id = -1,
         private string $title = '',
-        private int $id = -1
     ) {
     }
 
@@ -119,6 +120,11 @@ class Task
         return $tasks;
     }
 
+    public function newRecord(): bool
+    {
+        return $this->id === -1;
+    }
+
     public static function findById(int $id): Task|null
     {
         $pdo = Database::getDatabaseConn();
@@ -137,8 +143,14 @@ class Task
         return new Task(id: $row['id'], title: $row['title']);
     }
 
-    public function newRecord(): bool
+    public static function paginate(int $page = 1, int $per_page = 10): Paginator
     {
-        return $this->id === -1;
+        return new Paginator(
+            class: Task::class,
+            page: $page,
+            per_page: $per_page,
+            table: 'tasks',
+            attributes: ['title']
+        );
     }
 }

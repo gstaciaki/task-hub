@@ -32,7 +32,6 @@ abstract class ControllerTestCase extends TestCase
 
         ob_start();
         try {
-            $controller->$action();
             $controller->$action($this->request);
             return ob_get_contents();
         } catch (\Exception $e) {
