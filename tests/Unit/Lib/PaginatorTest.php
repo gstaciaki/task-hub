@@ -92,6 +92,6 @@ class PaginatorTest extends TestCase
     {
         $paginator = new Paginator(Task::class, 1, 10, 'tasks', ['title']);
 
-        $this->assertEquals(1, $paginator->getCurrentPage());
+        $this->assertEquals(1, $paginator->getPage());
     }
 }
