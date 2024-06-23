@@ -38,6 +38,16 @@ class Router
         return $route;
     }
 
+    public function getRouteSize(): int
+    {
+        return sizeof($this->routes);
+    }
+
+    public function getRoute(int $index): Route
+    {
+        return $this->routes[$index];
+    }
+
     /**
      * @param string $name
      * @param mixed[] $params
@@ -94,6 +104,8 @@ class Router
 
         foreach ($this->routes as $route) {
             if ($route->match($request)) {
+                $route->runMiddlewares($request);
+
                 $class = $route->getControllerName();
                 $action = $route->getActionName();
 

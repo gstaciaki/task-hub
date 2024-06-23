@@ -1,0 +1,3 @@
+<?php
+
+$json = ["userId" => $id];

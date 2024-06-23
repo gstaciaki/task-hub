@@ -58,4 +58,9 @@ class Request
     {
         return $this->params[$key] ?? $default;
     }
+
+    public function getHeader(string $key, mixed $default = null): mixed
+    {
+        return $this->headers[$key] ?? $default;
+    }
 }
