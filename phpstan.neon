@@ -1,5 +1,4 @@
 parameters:
-
   level: 6
   paths:
     - app
@@ -8,3 +7,6 @@ parameters:
 
   excludePaths:
     - app/views/*
+
+  ignoreErrors:
+    - '#Unsafe usage of new static\(\)\.#'

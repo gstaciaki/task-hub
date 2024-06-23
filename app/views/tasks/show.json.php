@@ -1,3 +1,3 @@
 <?php
 
-$json = empty($errors) ? ['id' => $task->getId(), 'title' => $task->getTitle()] : ['errors' => $errors];
+$json = empty($errors) ? ['id' => $task->id, 'title' => $task->title] : ['errors' => $errors];

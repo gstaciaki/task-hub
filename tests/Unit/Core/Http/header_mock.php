@@ -13,6 +13,7 @@ namespace {
             'Connection' => 'keep-alive',
             'Upgrade-Insecure-Requests' => '1',
             'Cache-Control' => 'max-age=0',
+            'Authorization' => '1'
         ];
     }
 };
