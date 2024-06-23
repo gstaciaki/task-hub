@@ -3,10 +3,23 @@
 namespace App\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Core\Http\Request;
+use Lib\Authentication\Auth;
 
 class TasksController
 {
+    private ?User $currentUser = null;
+
+    public function currentUser(Request $request): ?User
+    {
+        if ($this->currentUser === null) {
+            $this->currentUser = Auth::user($request);
+        }
+
+        return $this->currentUser;
+    }
+
     public function index(Request $request): void
     {
         $paginator = Task::paginate($request->getParam('page', 1), $request->getParam('per_page', 10));
@@ -33,7 +46,7 @@ class TasksController
             $this->render('show', compact('task'), 201);
         } else {
             $errors = $task->errors();
-            $this->render('errors', compact('errors'), 400);
+            $this->render('show', compact('errors'), 422);
         }
     }
 
@@ -48,7 +61,7 @@ class TasksController
             $this->render('show', compact('task'));
         } else {
             $errors = $task->errors();
-            $this->render('errors', compact('errors'), 400);
+            $this->render('show', compact('errors'), 422);
         }
     }
 

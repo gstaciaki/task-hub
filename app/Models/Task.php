@@ -84,13 +84,13 @@ class Task
         $this->errors = [];
 
         if (empty($this->title)) {
-            $this->errors['title'] = 'nao pode ser vazio';
+            $this->errors['title'] = 'não pode ser vazio!';
         }
 
         return empty($this->errors);
     }
 
-    public function hasErros(): bool
+    public function hasErrors(): bool
     {
         return empty($this->errors);
     }
@@ -98,8 +98,11 @@ class Task
     /**
      * @return array<string, string>
      */
-    public function errors(): array|null
+    public function errors(string $index = ''): string | array
     {
+        if (isset($this->errors[$index])) {
+            return $this->errors[$index];
+        }
         return $this->errors;
     }
 

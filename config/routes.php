@@ -1,17 +1,26 @@
 <?php
 
+use App\Controllers\AuthenticationsController;
 use App\Controllers\TasksController;
 use Core\Router\Route;
 
-//Create
-Route::post('/tasks', [TasksController::class, 'create'])->name('tasks.create');
+// Authentication
+Route::post('/login', [AuthenticationsController::class, 'authenticate'])->name('users.authenticate');
 
-// Retrieve
-Route::get('/tasks', [TasksController::class, 'index'])->name('tasks.paginate');
-Route::get('/tasks/{id}', [TasksController::class, 'show'])->name('tasks.show');
+Route::middleware('auth')->group(function () {
+    //Create
+    Route::post('/tasks', [TasksController::class, 'create'])->name('tasks.create');
 
-// Update
-Route::put('/tasks/{id}', [TasksController::class, 'update'])->name('tasks.update');
+    // Retrieve
+    Route::get('/tasks', [TasksController::class, 'index'])->name('tasks.paginate');
+    Route::get('/tasks/{id}', [TasksController::class, 'show'])->name('tasks.show');
 
-// Delete
-Route::delete('/tasks/{id}', [TasksController::class, 'destroy'])->name('tasks.destroy');
+    // Update
+    Route::put('/tasks/{id}', [TasksController::class, 'update'])->name('tasks.update');
+
+    // Delete
+    Route::delete('/tasks/{id}', [TasksController::class, 'destroy'])->name('tasks.destroy');
+
+
+    Route::get('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');
+});
