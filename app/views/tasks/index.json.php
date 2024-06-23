@@ -1,7 +1,7 @@
 <?php
 
 foreach ($tasks as $task) {
-    $tasksToJson[] = ['id' => $task->getId(), 'title' => $task->getTitle()];
+    $tasksToJson[] = ['id' => $task->id, 'title' => $task->title];
 }
 
 $meta = [

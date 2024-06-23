@@ -8,8 +8,8 @@ class TasksControllerTest extends ControllerTestCase
 {
     public function test_list_all_tasks(): void
     {
-        $tasks[] = new Task(title: 'Task 1');
-        $tasks[] = new Task(title: 'Task 2');
+        $tasks[] = new Task(['title' => 'Task 1']);
+        $tasks[] = new Task(['title' => 'Task 2']);
 
         foreach ($tasks as $task) {
             $task->save();
@@ -18,7 +18,7 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(action: 'index', controller: 'App\Controllers\TasksController');
 
         foreach ($tasks as $task) {
-            $this->assertMatchesRegularExpression("/{$task->getTitle()}/", $response);
+            $this->assertMatchesRegularExpression("/{$task->title}/", $response);
         }
     }
 }

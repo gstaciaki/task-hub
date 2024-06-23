@@ -11,7 +11,7 @@ class TasksPopulate
         $numberOfTasks = 100;
 
         for ($i = 0; $i < $numberOfTasks; $i++) {
-            $task = new Task(title: 'Task ' . $i);
+            $task = new Task(['title' => 'Task ' . $i]);
             $task->save();
         }
 

@@ -3,10 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Lib\Authentication\Auth;
 
-class AuthenticationsController
+class AuthenticationsController extends Controller
 {
     public function authenticate(Request $request): void
     {
@@ -16,30 +17,17 @@ class AuthenticationsController
         if ($user && $user->authenticate($params['password'])) {
             $id = Auth::login($user);
 
-            $this->render('index', compact('id'));
+            $this->render('authentications/login', compact('id'));
         } else {
             exit;
         }
     }
 
-    public function destroy(): void
+    public function destroy(Request $request): void
     {
-        Auth::logout();
-    }
+        $user = Auth::user($request);
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    private function render(string $view, array $data = [], int $responseCode = 200): void
-    {
-        extract($data);
-
-        $view = '/var/www/app/views/authentications/' . $view . '.json.php';
-        $json = [];
-
-        header('Content-Type: application/json; charset=utf-8');
-        http_response_code($responseCode);
-        require $view;
-        echo json_encode($json);
+        Auth::logout($user);
+        $this->render('authentications/logout');
     }
 }

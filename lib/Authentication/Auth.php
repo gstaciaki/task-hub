@@ -9,7 +9,7 @@ class Auth
 {
     public static function login($user): int
     {
-        return $user->getId();
+        return $user->id;
     }
 
     public static function user(Request $request): ?User
@@ -27,7 +27,7 @@ class Auth
         return $request->getHeader('Authorization') && self::user($request) !== null;
     }
 
-    public static function logout(): void
+    public static function logout(User $user): void
     {
     }
 }
