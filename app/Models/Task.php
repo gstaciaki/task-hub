@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\HasMany;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
 
@@ -14,6 +15,11 @@ class Task extends Model
 {
     protected static string $table = 'tasks';
     protected static array $columns = ['title'];
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'task_id');
+    }
 
     public function validates(): void
     {
