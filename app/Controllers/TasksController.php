@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\Task;
-use App\Models\User;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 

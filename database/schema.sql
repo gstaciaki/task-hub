@@ -1,8 +1,18 @@
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL
+);
+
+DROP TABLE IF EXISTS task_comments;
+
+CREATE TABLE task_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    task_id int NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+    description text NOT NULL
 );
 
 DROP TABLE IF EXISTS users;
@@ -13,3 +23,5 @@ CREATE TABLE users (
     email VARCHAR(50) UNIQUE NOT NULL,
     encrypted_password VARCHAR(255) NOT NULL
 );
+
+SET foreign_key_checks = 1;
