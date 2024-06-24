@@ -14,6 +14,7 @@ class TasksController extends Controller
         $tasks = $paginator->registers();
 
         $this->render('tasks/index', compact('paginator', 'tasks'));
+        $this->render('tasks/index', compact('paginator', 'tasks'));
     }
 
     public function show(Request $request): void
@@ -23,17 +24,21 @@ class TasksController extends Controller
         $task = Task::findById($params['id']);
 
         $this->render('tasks/show', compact('task'));
+        $this->render('tasks/show', compact('task'));
     }
 
     public function create(Request $request): void
     {
         $params = $request->getParams();
         $task = new Task($params);
+        $task = new Task($params);
 
         if ($task->save()) {
             $this->render('tasks/show', compact('task'), 201);
+            $this->render('tasks/show', compact('task'), 201);
         } else {
             $errors = $task->errors();
+            $this->render('tasks/show', compact('errors'), 422);
             $this->render('tasks/show', compact('errors'), 422);
         }
     }
@@ -42,14 +47,19 @@ class TasksController extends Controller
     {
         $params = $request->getParams();
         $id = $params['id'];
+        $id = $params['id'];
 
+        $task = Task::findById($id);
+        $task->title = $params['title'];
         $task = Task::findById($id);
         $task->title = $params['title'];
 
         if ($task->save()) {
             $this->render('tasks/show', compact('task'));
+            $this->render('tasks/show', compact('task'));
         } else {
             $errors = $task->errors();
+            $this->render('tasks/show', compact('errors'), 422);
             $this->render('tasks/show', compact('errors'), 422);
         }
     }
@@ -57,7 +67,9 @@ class TasksController extends Controller
     public function destroy(Request $request): void
     {
         $id = $request->getParam('id');
+        $id = $request->getParam('id');
 
+        $task = Task::findById($id);
         $task = Task::findById($id);
         $task->destroy();
         $this->render('tasks/show', compact('task'));
