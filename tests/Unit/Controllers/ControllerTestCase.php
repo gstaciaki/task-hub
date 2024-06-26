@@ -14,6 +14,7 @@ abstract class ControllerTestCase extends TestCase
     {
         parent::setUp();
         require Constants::rootPath()->join('config/routes.php');
+        require_once Constants::rootPath()->join('tests/Unit/Core/Http/header_mock.php');
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/';

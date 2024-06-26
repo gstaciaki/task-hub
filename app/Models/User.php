@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\BelongsToMany;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
 
@@ -10,6 +11,7 @@ use Core\Database\ActiveRecord\Model;
  * @property string $name
  * @property string $email
  * @property string $encrypted_password
+ * @property Task[] $owned_tasks
  */
 class User extends Model
 {
@@ -18,6 +20,11 @@ class User extends Model
 
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
+
+    public function ownedTasks(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_user_owners', 'user_id', 'task_id');
+    }
 
     public function validates(): void
     {

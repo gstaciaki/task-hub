@@ -20,7 +20,8 @@ class Paginator
         private int $per_page,
         private string $table,
         private array $attributes,
-        private array $conditions = []
+        private array $conditions = [],
+        private ?string $route = null
     ) {
         $this->loadTotals();
         $this->loadRegisters();
@@ -82,7 +83,7 @@ class Paginator
     }
     public function getRouteName(): string
     {
-        return "$this->table.paginate";
+        return $this->route ?? "$this->table.paginate";
     }
     private function loadTotals(): void
     {

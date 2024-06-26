@@ -1,12 +1,14 @@
 <?php
 
+$tasksToJson = [];
+$tasks = $response['tasks'];
+
 foreach ($tasks as $task) {
-    $tasksToJson[] = ['id' => $task->id, 'title' => $task->title];
+    $arrayOwners = array_map(function ($user) {
+        return ['id' => $user->id, 'name' => $user->name];
+    }, $task->owners()->get());
+
+    $tasksToJson[] = ['id' => $task->id, 'title' => $task->title, 'owners' => $arrayOwners];
 }
 
-$meta = [
-    'currentPage' => $paginator->getPage(),
-    'pages' => $paginator->totalOfPages(),
-    'total' => $paginator->totalOfRegisters()
-];
-$json = ['meta' => $meta, 'tasks' => $tasksToJson];
+$json = $tasksToJson;

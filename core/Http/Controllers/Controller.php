@@ -9,21 +9,29 @@ use Lib\Authentication\Auth;
 
 class Controller
 {
-    private ?User $currentUser = null;
+    protected string $layout = 'application';
+    protected ?User $current_user = null;
+    protected int $responseCode = 200;
+    private Request $request;
 
-    public function currentUser(Request $request): ?User
+    public function __construct()
     {
-        if ($this->currentUser === null) {
-            $this->currentUser = Auth::user($request);
-        }
+        $this->request = new Request();
+        $this->current_user = Auth::user($this->request);
+    }
 
-        return $this->currentUser;
+    public function currentUser(): ?User
+    {
+        if ($this->current_user === null) {
+            $this->current_user = Auth::user($this->request);
+        }
+        return $this->current_user;
     }
 
     /**
      * @param array<string, mixed> $data
      */
-    protected function render(string $view, array $data = [], int $responseCode = 200): void
+    protected function render(string $view, array $data = []): void
     {
         extract($data);
 
@@ -31,7 +39,7 @@ class Controller
         $json = [];
 
         header('Content-Type: application/json; chartset=utf-8');
-        http_response_code($responseCode);
+        http_response_code($this->responseCode);
         require $view;
         echo json_encode($json);
         return;
