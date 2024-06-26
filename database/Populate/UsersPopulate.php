@@ -18,7 +18,7 @@ class UsersPopulate
         $user = new User($data);
         $user->save();
 
-        $numberOfUsers = 10;
+        $numberOfUsers = 5;
 
         for ($i = 1; $i < $numberOfUsers; $i++) {
             $data =  [

@@ -13,8 +13,9 @@ class CommentsController extends Controller
         $taskId = $request->getParam("task_id");
 
         $comments = Comment::where(['task_id' => $taskId]);
+        $response = ['comments' => $comments];
 
-        $this->render('comments/index', compact('comments'));
+        $this->render('comments/index', compact('response'));
     }
 
     public function show(Request $request): void
@@ -23,8 +24,9 @@ class CommentsController extends Controller
         $id = $request->getParam("id");
 
         $comment = Comment::findBy(['id' => $id, 'task_id' => $taskId]);
+        $response = ['comment' => $comment];
 
-        $this->render('comments/show', compact('comment'));
+        $this->render('comments/show', compact('response'));
     }
 
     public function create(Request $request): void
@@ -33,11 +35,14 @@ class CommentsController extends Controller
         $comment = new Comment($params);
 
         if ($comment->save()) {
-            $this->render('comments/show', compact('comment'), 201);
+            $this->responseCode = 201;
+            $response = ['comment' => $comment];
         } else {
-            $errors = $comment->errors();
-            $this->render('comments/show', compact('errors'), 422);
+            $response = ['error' => $comment->errors()];
+            $this->responseCode = 422;
         }
+
+        $this->render('comments/show', compact('response'));
     }
 
     public function update(Request $request): void
@@ -49,11 +54,15 @@ class CommentsController extends Controller
         $comment->description = $request->getParam('description');
 
         if ($comment->save()) {
-            $this->render('comments/show', compact('comment'), 201);
+            $this->responseCode = 201;
+            $response = ['comment' => $comment];
         } else {
             $errors = $comment->errors();
-            $this->render('comments/show', compact('errors'), 422);
+            $response = ['error' => $comment->errors()];
+            $this->responseCode = 422;
         }
+
+        $this->render('comments/show', compact('response'));
     }
 
     public function destroy(Request $request): void
@@ -63,6 +72,8 @@ class CommentsController extends Controller
 
         $comment = Comment::findBy(['id' => $id, 'task_id' => $taskId]);
         $comment->destroy();
-        $this->render('comments/show', compact('comment'));
+        $response = ['comment' => $comment];
+
+        $this->render('comments/show', compact('response'));
     }
 }
