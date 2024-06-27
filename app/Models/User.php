@@ -12,12 +12,14 @@ use Core\Database\ActiveRecord\Model;
  * @property string $name
  * @property string $email
  * @property string $encrypted_password
+ * @property boolean $is_admin
+ * @property string $created_at
  * @property Task[] $owned_tasks
  */
 class User extends Model
 {
     protected static string $table = 'users';
-    protected static array $columns = ['name', 'email', 'encrypted_password', 'avatar_name'];
+    protected static array $columns = ['name', 'email', 'encrypted_password', 'avatar_name', 'is_admin', 'created_at'];
 
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
@@ -37,6 +39,11 @@ class User extends Model
         if ($this->newRecord()) {
             Validations::passwordConfirmation($this);
         }
+    }
+
+    public function validateProp(string $key): void
+    {
+        Validations::notEmpty($key, $this);
     }
 
     public function authenticate(string $password): bool
@@ -69,5 +76,10 @@ class User extends Model
     public function avatar(): ProfileAvatar
     {
         return new ProfileAvatar($this);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin == 1;
     }
 }
