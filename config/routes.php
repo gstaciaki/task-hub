@@ -5,6 +5,7 @@ use App\Controllers\CommentsController;
 use App\Controllers\OwnerTasksController;
 use App\Controllers\ProfileController;
 use App\Controllers\TasksController;
+use App\Controllers\UsersController;
 use Core\Router\Route;
 
 // Authentication
@@ -40,4 +41,17 @@ Route::middleware('auth')->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+
+    // Admin Routes
+    Route::middleware('admin')->group(function () {
+        // Users
+        Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+        Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
+
+        Route::post('/users', [UsersController::class, 'create'])->name('users.create');
+
+        Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update');
+
+        Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+    });
 });

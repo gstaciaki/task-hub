@@ -22,6 +22,8 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
     encrypted_password VARCHAR(255) NOT NULL,
+    is_admin VARCHAR(5) DEFAULT 'false',
+    created_at DATETIME DEFAULT NOW(),
     avatar_name VARCHAR (65)
 );
 

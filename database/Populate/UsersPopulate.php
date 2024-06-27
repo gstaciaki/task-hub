@@ -8,11 +8,13 @@ class UsersPopulate
 {
     public static function populate()
     {
-        $data =  [
-            'name' => 'Fulano',
+        $data = [
+            'name' => 'root',
             'email' => 'fulano@example.com',
             'password' => '123456',
-            'password_confirmation' => '123456'
+            'password_confirmation' => '123456',
+            'created_at' => date_create()->format('Y-m-d H:i:s'),
+            'is_admin' => true
         ];
 
         $user = new User($data);
@@ -21,11 +23,13 @@ class UsersPopulate
         $numberOfUsers = 5;
 
         for ($i = 1; $i < $numberOfUsers; $i++) {
-            $data =  [
+            $data = [
                 'name' => 'Fulano ' . $i,
                 'email' => 'fulano' . $i . '@example.com',
                 'password' => '123456',
-                'password_confirmation' => '123456'
+                'password_confirmation' => '123456',
+                'created_at' => date_create()->format('Y-m-d H:i:s'),
+                'is_admin' => false
             ];
 
             $user = new User($data);

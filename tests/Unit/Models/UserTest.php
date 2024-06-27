@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Task;
+use App\Models\TaskOwnership;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -78,6 +80,26 @@ class UserTest extends TestCase
         $this->assertEquals('outro@example.com', $this->user->email);
     }
 
+    public function test_set_is_admin(): void
+    {
+        $this->user->is_admin = false;
+        $this->assertFalse($this->user->is_admin);
+    }
+
+    public function test_set_created_at(): void
+    {
+        $this->user->created_at = '2023-01-01T00:00:00.000Z';
+        $this->assertEquals('2023-01-01T00:00:00.000Z', $this->user->created_at);
+    }
+
+    public function test_should_return_if_user_is_admin(): void
+    {
+        $this->user->is_admin = true;
+        $this->assertTrue($this->user->isAdmin());
+        $this->user->is_admin = false;
+        $this->assertFalse($this->user->isAdmin());
+    }
+
     public function test_errors_should_return_errors(): void
     {
         $user = new User();
@@ -151,5 +173,32 @@ class UserTest extends TestCase
     {
         $this->assertTrue($this->user->authenticate('123456'));
         $this->assertFalse($this->user->authenticate('wrong'));
+    }
+
+    public function test_should_return_user_owned_tasks(): void
+    {
+        $user = new User([
+            'name' => 'User ',
+            'email' => 'fulano@example.com',
+            'password' => '123456',
+            'password_confirmation' => '123456'
+        ]);
+
+        $user->save();
+        $user = User::findById(1);
+
+        $tasks[] = new Task(['title' => 'Task 1']);
+        $tasks[] = new Task(['title' => 'Task 2']);
+
+        foreach ($tasks as $task) {
+            $task->save();
+            $taskOwnership = new TaskOwnership(['task_id' => $task->id, 'user_id' => $user->id]);
+            $taskOwnership->save();
+        }
+
+        $ownedTasks = $user->ownedTasks()->get();
+
+        $this->assertEquals('Task 1', $ownedTasks[0]->title);
+        $this->assertEquals('Task 2', $ownedTasks[1]->title);
     }
 }

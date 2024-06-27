@@ -27,8 +27,12 @@ abstract class ControllerTestCase extends TestCase
         unset($_SERVER['REQUEST_URI']);
     }
 
-    public function get(string $action, string $controller): string
+    /**
+     * @param array<string, mixed> $params
+     */
+    public function get(string $action, string $controller, array $params = []): string
     {
+        $this->request->addParams($params);
         $controller = new $controller();
 
         ob_start();
