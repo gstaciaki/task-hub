@@ -8,7 +8,15 @@ foreach ($tasks as $task) {
         return ['id' => $user->id, 'name' => $user->name];
     }, $task->owners()->get());
 
-    $tasksToJson[] = ['id' => $task->id, 'title' => $task->title, 'owners' => $arrayOwners];
+    $tasksToJson[] = [
+        'id' => $task->id,
+        'title' => $task->title,
+        'priority' => $task->priority,
+        'status' => $task->status,
+        'created_at' => $task->created_at,
+        'finished_at' => $task->finished_at,
+        'owners' => $arrayOwners
+    ];
 }
 
 $json = $tasksToJson;

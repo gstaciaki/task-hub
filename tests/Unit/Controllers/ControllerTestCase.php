@@ -29,10 +29,12 @@ abstract class ControllerTestCase extends TestCase
 
     /**
      * @param array<string, mixed> $params
+     * @param array<string, mixed> $headers
      */
-    public function get(string $action, string $controller, array $params = []): string
+    public function get(string $action, string $controller, array $params = [], array $headers = []): string
     {
         $this->request->addParams($params);
+        $this->request->addHeaders($headers);
         $controller = new $controller();
 
         ob_start();

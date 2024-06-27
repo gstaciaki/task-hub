@@ -10,5 +10,13 @@ if (isset($response['error'])) {
         return ['id' => $user->id, 'name' => $user->name];
     }, $owners);
 
-    $json = ['id' => $task->id, 'title' => $task->title, 'owners' => $arrayOwners];
+    $json = [
+        'id' => $task->id,
+        'title' => $task->title,
+        'priority' => $task->priority,
+        'status' => $task->status,
+        'created_at' => $task->created_at,
+        'finished_at' => $task->finished_at,
+        'owners' => $arrayOwners
+    ];
 }

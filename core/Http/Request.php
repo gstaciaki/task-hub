@@ -49,6 +49,12 @@ class Request
         $this->params = array_merge($this->params, $params);
     }
 
+    /** @param mixed[] $headers*/
+    public function addHeaders(array $headers): void
+    {
+        $this->headers = array_merge($this->params, $headers);
+    }
+
     public function acceptJson(): bool
     {
         return (isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === 'application/json');

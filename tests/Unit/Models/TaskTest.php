@@ -55,6 +55,44 @@ class TaskTest extends TestCase
         $this->assertEquals(7, $task->id);
     }
 
+    public function test_set_priority(): void
+    {
+        $task = new Task(['title' => 'Task 1']);
+        $task->priority = 'urgent';
+
+        $this->assertEquals('urgent', $task->priority);
+    }
+
+    public function test_should_change_status_when_finished(): void
+    {
+        $task = new Task(['title' => 'Task 1']);
+        $task->save();
+        $task = Task::findById($task->id);
+
+        $this->assertEquals('open', $task->status);
+
+        $task->finish();
+
+        $this->assertEquals('closed', $task->status);
+    }
+
+    public function test_should_set_created_at_when_created_new_task(): void
+    {
+        $task = new Task(['title' => 'Task 1']);
+        $task->save();
+
+        $this->assertEquals(date('Y-m-d H:i:s'), $task->created_at);
+    }
+
+    public function test_set_finished_at_when_finished_task(): void
+    {
+        $task = new Task(['title' => 'Task 1']);
+        $task->save();
+        $task->finish();
+
+        $this->assertEquals(date('Y-m-d H:i:s'), $task->finished_at);
+    }
+
     public function test_errors_should_return_title_error(): void
     {
         $task = new Task(['title' => 'Task 1']);
