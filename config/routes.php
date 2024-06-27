@@ -3,6 +3,7 @@
 use App\Controllers\AuthenticationsController;
 use App\Controllers\CommentsController;
 use App\Controllers\OwnerTasksController;
+use App\Controllers\ProfileController;
 use App\Controllers\TasksController;
 use Core\Router\Route;
 
@@ -35,4 +36,8 @@ Route::middleware('auth')->group(function () {
         [OwnerTasksController::class, 'removeOwner']
     )->name('owner.tasks.remove-owner');
     Route::post('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');
+
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
 });
