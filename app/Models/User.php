@@ -24,7 +24,7 @@ class User extends Model
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
 
-    public function ownedTasks(): BelongsToMany
+    public function tasks(): BelongsToMany
     {
         return $this->belongsToMany(Task::class, 'task_user_owners', 'user_id', 'task_id');
     }

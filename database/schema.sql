@@ -4,7 +4,11 @@ DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL
+    title VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT NOW(),
+    finished_at DATETIME,
+    priority enum('urgent','high','normal','low'),
+    status enum('open', 'closed') DEFAULT 'open'
 );
 
 DROP TABLE IF EXISTS task_comments;

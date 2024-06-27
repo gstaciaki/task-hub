@@ -196,7 +196,7 @@ class UserTest extends TestCase
             $taskOwnership->save();
         }
 
-        $ownedTasks = $user->ownedTasks()->get();
+        $ownedTasks = $user->tasks()->get();
 
         $this->assertEquals('Task 1', $ownedTasks[0]->title);
         $this->assertEquals('Task 2', $ownedTasks[1]->title);

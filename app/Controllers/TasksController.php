@@ -11,7 +11,7 @@ class TasksController extends Controller
 {
     public function index(Request $request): void
     {
-        $tasks = $this->current_user->ownedTasks()->get();
+        $tasks = $this->current_user->tasks()->get();
         $response = ['tasks' => $tasks];
 
         $this->render('tasks/index', compact('response'));
@@ -21,15 +21,10 @@ class TasksController extends Controller
     {
         $params = $request->getParams();
 
-        $task = Task::findById($params['id']);
+        $task = $this->current_user->tasks()->find($params['id']);
 
         if ($task !== null) {
-            if ($task->isTaskOwner($this->current_user->id)) {
-                $response = ['task' => $task];
-            } else {
-                $response = ["error" => "not authorized"];
-                $this->responseCode = 403;
-            }
+            $response = ['task' => $task];
         } else {
             $response = ["error" => "task not found"];
             $this->responseCode = 404;
@@ -41,7 +36,7 @@ class TasksController extends Controller
     public function create(Request $request): void
     {
         $params = $request->getParams();
-        $task = new Task($params);
+        $task = new Task(['title' => $params['title']]);
 
         if ($task->save()) {
             $taskOwner = new TaskOwnership(['task_id' => $task->id, 'user_id' => $this->current_user->id]);
@@ -61,31 +56,54 @@ class TasksController extends Controller
         $params = $request->getParams();
         $id = $params['id'];
 
-        $task = Task::findById($id);
+        /** @var ?Task $task */
+        $task = $this->current_user->tasks()->find($params['id']);
 
         if ($task !== null) {
-            if ($task->isTaskOwner($this->current_user->id)) {
-                $task->removeOwners();
+            $task->removeOwners();
 
-                $owners = $request->getParam('owners');
+            $owners = $request->getParam('owners');
 
-                foreach ($owners as $owner) {
-                    $taskOwner = new TaskOwnership(['task_id' => $task->id, 'user_id' => $owner]);
-                    $taskOwner->save();
+            foreach ($owners as $owner) {
+                $taskOwner = new TaskOwnership(['task_id' => $task->id, 'user_id' => $owner]);
+                $taskOwner->save();
+            }
+
+            $data = [];
+            foreach ($params as $key => $param) {
+                switch ($key) {
+                    case 'title':
+                        $task->title = $param;
+                        $data['title'] = $param;
+                        $task->validateProp($key);
+                        break;
+                    case 'priority':
+                        $task->priority = $param;
+                        $data['priority'] = $param;
+                        $task->validateProp($key);
+                        break;
+                    case 'status':
+                        $task->validateProp($key);
+                        if ($param == 'closed') {
+                            $task->finish();
+                        } else {
+                            $task->reOpen();
+                        }
+                        $data['status'] = $task->status;
+                        $data['finished_at'] = $task->finished_at;
+                        break;
+                    default:
+                        break;
                 }
+            }
 
-                $task->title = $params['title'];
-                $owners = $task->owners()->get();
-
-                if ($task->save()) {
-                    $response = ['task' => $task];
-                } else {
-                    $response = ['error' => $task->errors()];
-                    $this->responseCode = 422;
-                }
+            $owners = $task->owners()->get();
+            if ($task->hasErrors()) {
+                $task->update($data);
+                $response = ['task' => Task::findById($id)];
             } else {
-                $response = ["error" => "not authorized"];
-                $this->responseCode = 403;
+                $response = ['error' => $task->errors()];
+                $this->responseCode = 422;
             }
         } else {
             $response = ["error" => "task not found"];
@@ -99,16 +117,11 @@ class TasksController extends Controller
     {
         $id = $request->getParam('id');
 
-        $task = Task::findById($id);
+        $task = $this->current_user->tasks()->find($id);
 
         if ($task !== null) {
-            if ($task->isTaskOwner($this->current_user->id)) {
-                $response = ['task' => $task];
-                $task->destroy();
-            } else {
-                $response = ["error" => "not authorized"];
-                $this->responseCode = 403;
-            }
+            $response = ['task' => $task];
+            $task->destroy();
         } else {
             $response = ["error" => "task not found"];
             $this->responseCode = 404;

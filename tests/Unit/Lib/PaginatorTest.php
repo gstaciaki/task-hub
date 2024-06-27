@@ -20,7 +20,13 @@ class PaginatorTest extends TestCase
             $task->save();
             $this->tasks[] = $task;
         }
-        $this->paginator = new Paginator(Task::class, 1, 5, 'tasks', ['title']);
+        $this->paginator = new Paginator(
+            Task::class,
+            1,
+            5,
+            'tasks',
+            ['title', 'created_at', 'finished_at', 'status', 'priority']
+        );
     }
 
     public function test_total_of_registers(): void
@@ -84,7 +90,13 @@ class PaginatorTest extends TestCase
     {
         $this->assertCount(5, $this->paginator->registers());
 
-        $paginator = new Paginator(Task::class, 1, 10, 'tasks', ['title']);
+        $paginator = new Paginator(
+            Task::class,
+            1,
+            10,
+            'tasks',
+            ['title', 'created_at', 'finished_at', 'status', 'priority']
+        );
         $this->assertEquals($this->tasks, $paginator->registers());
     }
 

@@ -80,4 +80,42 @@ class BelongsToMany
 
         return $rows[0]['total'];
     }
+
+    public function find(int $id): ?Model
+    {
+        $fromTable = $this->model::table();
+        $toTable = $this->related::table();
+
+        $attributes = $toTable . '.id, ';
+        foreach ($this->related::columns() as $column) {
+            $attributes .= $toTable . '.' . $column . ', ';
+        }
+        $attributes = rtrim($attributes, ', ');
+
+        $sql = <<<SQL
+            SELECT 
+                {$attributes}
+            FROM 
+                {$fromTable}, {$toTable}, {$this->pivot_table}
+            WHERE 
+                {$toTable}.id = {$this->pivot_table}.{$this->to_foreign_key} AND
+                {$fromTable}.id = {$this->pivot_table}.{$this->from_foreign_key} AND
+                {$fromTable}.id = :id AND
+                {$toTable}.id = :related_id    
+        SQL;
+
+        $pdo = Database::getDatabaseConn();
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindValue(':id', $this->model->id);
+        $stmt->bindValue(':related_id', $id);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($rows)) {
+            return new $this->related($rows[0]);
+        }
+
+        return null;
+    }
 }
