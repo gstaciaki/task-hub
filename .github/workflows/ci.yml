@@ -20,13 +20,13 @@ jobs:
       - name: Composer install
         run: ./run composer install
 
-      - name: PHP Unit
-        run: ./run test tests/Unit   
-
       - name: PHP Api
         run: |
           ./run up -d
           ./run test tests/Api
+
+      - name: PHP Unit
+        run: ./run test tests/Unit   
   
   code_quality:
     name: Code Quality Check
