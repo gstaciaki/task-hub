@@ -15,7 +15,6 @@ class AuthTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        require_once Constants::rootPath()->join('tests/Unit/Core/Http/header_mock.php');
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/test';
         $this->request = new Request();
@@ -26,6 +25,7 @@ class AuthTest extends TestCase
             'password_confirmation' => '123456'
         ]);
         $this->user->save();
+        $this->request->addHeaders(['Authorization' => $this->user->id]);
     }
 
     public function tearDown(): void
@@ -52,10 +52,4 @@ class AuthTest extends TestCase
         Auth::login($this->user);
         $this->assertTrue(Auth::check($this->request));
     }
-    // public function test_logout(): void
-    // {
-    //     Auth::login($this->user);
-    //     Auth::logout($this->user);
-    //     $this->assertFalse(Auth::check($this->request));
-    // }
 }

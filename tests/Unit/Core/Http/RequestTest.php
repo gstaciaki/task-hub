@@ -11,7 +11,6 @@ class RequestTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        require_once Constants::rootPath()->join('tests/Unit/Core/Http/header_mock.php');
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/test';
     }

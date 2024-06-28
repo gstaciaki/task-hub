@@ -177,8 +177,6 @@ class RouteTest extends TestCase
 
     private function request(string $method, string $uri): Request
     {
-        require_once Constants::rootPath()->join('tests/Unit/Core/Http/header_mock.php');
-
         $_SERVER['REQUEST_METHOD'] = $method;
         $_SERVER['REQUEST_URI'] = $uri;
         $_REQUEST = [];

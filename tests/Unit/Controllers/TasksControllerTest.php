@@ -30,7 +30,11 @@ class TasksControllerTest extends ControllerTestCase
             $taskOwnership->save();
         }
 
-        $response = $this->get(action: 'index', controller: 'App\Controllers\TasksController');
+        $response = $this->get(
+            action: 'index',
+            controller: 'App\Controllers\TasksController',
+            headers: ['Authorization' => 1]
+        );
 
         foreach ($tasks as $task) {
             $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -58,7 +62,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'show',
             controller: 'App\Controllers\TasksController',
-            params: ["id" => $task->id]
+            params: ["id" => $task->id],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -75,14 +80,20 @@ class TasksControllerTest extends ControllerTestCase
         ]);
         $user->save();
 
-        $response = $this->get(action: 'show', controller: 'App\Controllers\TasksController', params: ["id" => 8545]);
+        $response = $this->get(
+            action: 'show',
+            controller: 'App\Controllers\TasksController',
+            params: ["id" => 8545],
+            headers: ['Authorization' => 1]
+        );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
 
         $response = $this->get(
             action: 'update',
             controller: 'App\Controllers\TasksController',
-            params: ["id" => 8545]
+            params: ["id" => 8545],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
@@ -90,7 +101,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'destroy',
             controller: 'App\Controllers\TasksController',
-            params: ["id" => 8545]
+            params: ["id" => 8545],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
@@ -108,7 +120,12 @@ class TasksControllerTest extends ControllerTestCase
         ]);
         $user->save();
 
-        $this->get(action: 'create', controller: 'App\Controllers\TasksController', params: ["title" => 'new task']);
+        $this->get(
+            action: 'create',
+            controller: 'App\Controllers\TasksController',
+            params: ["title" => 'new task'],
+            headers: ['Authorization' => 1]
+        );
 
 
         $this->assertCount(1, Task::all());
@@ -134,7 +151,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'create',
             controller: 'App\Controllers\TasksController',
-            params: ["title" => '']
+            params: ["title" => ''],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/error/", $response);
@@ -142,7 +160,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'update',
             controller: 'App\Controllers\TasksController',
-            params: ["title" => '', 'id' => 1, 'owners' => [1]]
+            params: ["title" => '', 'id' => 1, 'owners' => [1]],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/error/", $response);
@@ -167,7 +186,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'show',
             controller: 'App\Controllers\TasksController',
-            params: ["id" => $task->id]
+            params: ["id" => $task->id],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -178,7 +198,12 @@ class TasksControllerTest extends ControllerTestCase
             "owners" => [1]
         ];
 
-        $response = $this->get(action: 'update', controller: 'App\Controllers\TasksController', params: $data);
+        $response = $this->get(
+            action: 'update',
+            controller: 'App\Controllers\TasksController',
+            params: $data,
+            headers: ['Authorization' => 1]
+        );
 
         $this->assertMatchesRegularExpression("/new title/", $response);
     }
@@ -202,7 +227,8 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'show',
             controller: 'App\Controllers\TasksController',
-            params: ["id" => $task->id]
+            params: ["id" => $task->id],
+            headers: ['Authorization' => 1]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -214,7 +240,12 @@ class TasksControllerTest extends ControllerTestCase
             "unknowPropertie" => "unknow"
         ];
 
-        $response = $this->get(action: 'update', controller: 'App\Controllers\TasksController', params: $data);
+        $response = $this->get(
+            action: 'update',
+            controller: 'App\Controllers\TasksController',
+            params: $data,
+            headers: ['Authorization' => 1]
+        );
 
         $this->assertMatchesRegularExpression("/new title/", $response);
     }
@@ -237,7 +268,12 @@ class TasksControllerTest extends ControllerTestCase
 
         $this->assertCount(1, Task::all());
 
-        $this->get(action: 'destroy', controller: 'App\Controllers\TasksController', params: ["id" => $task->id]);
+        $this->get(
+            action: 'destroy',
+            controller: 'App\Controllers\TasksController',
+            params: ["id" => $task->id],
+            headers: ['Authorization' => 1]
+        );
 
         $this->assertCount(0, Task::all());
     }
