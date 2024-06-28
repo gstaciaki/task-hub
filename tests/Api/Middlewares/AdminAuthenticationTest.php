@@ -34,7 +34,7 @@ class AdminAuthenticationTest extends MiddlewareTestCase
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
-        
+
         $headers = [
             'Authorization' => $data["userId"],
             'Content-Type' => 'application/json',
