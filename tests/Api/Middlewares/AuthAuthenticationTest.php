@@ -2,7 +2,6 @@
 
 namespace Tests\Api\Middlewares;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
 
 class AuthAuthenticationTest extends MiddlewareTestCase
