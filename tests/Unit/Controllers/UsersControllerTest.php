@@ -50,8 +50,8 @@ class UsersControllerTest extends ControllerTestCase
         $data = [
             'name' => 'root',
             'email' => 'fulano@example.com',
-            'password' => '123456',
-            'password_confirmation' => '123456',
+            'password' => 'root',
+            'password_confirmation' => 'root',
             'created_at' => date_create()->format('Y-m-d H:i:s'),
             'is_admin' => true
         ];

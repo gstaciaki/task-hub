@@ -14,9 +14,9 @@ class Controller
     protected int $responseCode = 200;
     private Request $request;
 
-    public function __construct()
+    public function __construct(Request $request = new Request())
     {
-        $this->request = new Request();
+        $this->request = $request;
         $this->current_user = Auth::user($this->request);
     }
 

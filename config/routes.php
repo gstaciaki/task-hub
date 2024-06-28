@@ -31,11 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tasks/{task_id}/comments/{id}', [CommentsController::class, 'destroy'])->name('comments.destroy');
 
 
-    Route::post('/tasks/{task_id}/add-owner', [OwnerTasksController::class, 'addOwner'])->name('owner.tasks.add-owner');
-    Route::post(
-        '/tasks/{task_id}/remove-owner',
-        [OwnerTasksController::class, 'removeOwner']
-    )->name('owner.tasks.remove-owner');
     Route::post('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');
 
     // Profile
