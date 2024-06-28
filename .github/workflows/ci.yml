@@ -22,6 +22,11 @@ jobs:
 
       - name: PHP Unit
         run: ./run test   
+
+      - name: PHP Api
+        run: |
+          ./run up -d
+          ./run test tests/Api
   
   code_quality:
     name: Code Quality Check
