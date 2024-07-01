@@ -8,9 +8,16 @@ class UsersPopulate
 {
     public static function populate()
     {
+        $namesMap = [
+            1 => "Fulano ",
+            2 => "Ciclano ",
+            3 => "Beltrano ",
+            4 => "Mano ",
+        ];
+
         $data = [
-            'name' => 'root',
-            'email' => 'root@example.com',
+            'name' => 'admin',
+            'email' => 'admin@example.com',
             'password' => '123456',
             'password_confirmation' => '123456',
             'created_at' => date_create()->format('Y-m-d H:i:s'),
@@ -24,8 +31,8 @@ class UsersPopulate
 
         for ($i = 1; $i < $numberOfUsers; $i++) {
             $data = [
-                'name' => 'Fulano ' . $i,
-                'email' => 'fulano' . $i . '@example.com',
+                'name' => $namesMap[rand(1, 4)] . $i,
+                'email' => 'user' . $i . '@example.com',
                 'password' => '123456',
                 'password_confirmation' => '123456',
                 'created_at' => date_create()->format('Y-m-d H:i:s'),

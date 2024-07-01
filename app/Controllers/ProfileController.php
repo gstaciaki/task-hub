@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 
@@ -22,5 +23,12 @@ class ProfileController extends Controller
         $user = $this->current_user;
 
         $this->render('profile/show', compact('user'));
+    }
+
+    public function index(): void
+    {
+        $users = User::all();
+
+        $this->render('profile/index', compact('users'));
     }
 }
