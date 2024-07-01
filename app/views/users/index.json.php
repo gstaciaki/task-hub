@@ -20,4 +20,4 @@ $meta = [
     'total' => $paginator->totalOfRegisters()
 ];
 
-$json = ['meta' => $meta, 'tasks' => $usersToJson];
+$json = ['meta' => $meta, 'users' => $usersToJson];

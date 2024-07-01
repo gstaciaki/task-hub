@@ -11,7 +11,11 @@ class TasksController extends Controller
 {
     public function index(Request $request): void
     {
-        $tasks = $this->current_user->tasks()->get();
+        if ($this->current_user->isAdmin()) {
+            $tasks = Task::all();
+        } else {
+            $tasks = $this->current_user->tasks()->get();
+        }
         $response = ['tasks' => $tasks];
 
         $this->render('tasks/index', compact('response'));

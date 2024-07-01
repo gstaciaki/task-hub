@@ -21,7 +21,7 @@ class TaskOwnershipPopulate
                 $taskOwnership = new TaskOwnership(
                     ['task_id' => $task->id, 'user_id' => $user->id]
                 );
-                $taskOwnership->save();
+                if ($user->id % 2 === 0 || $user->id === 0){$taskOwnership->save();}
             }
         }
 

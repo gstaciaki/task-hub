@@ -8,7 +8,7 @@ class TasksPopulate
 {
     public static function populate()
     {
-        $numberOfTasks = 100;
+        $numberOfTasks = 10;
 
         for ($i = 0; $i < $numberOfTasks; $i++) {
             $task = new Task(['title' => 'Task ' . $i]);

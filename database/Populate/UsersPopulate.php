@@ -10,7 +10,7 @@ class UsersPopulate
     {
         $data = [
             'name' => 'root',
-            'email' => 'fulano@example.com',
+            'email' => 'root@example.com',
             'password' => '123456',
             'password_confirmation' => '123456',
             'created_at' => date_create()->format('Y-m-d H:i:s'),
