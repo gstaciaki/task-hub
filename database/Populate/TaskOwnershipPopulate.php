@@ -17,11 +17,14 @@ class TaskOwnershipPopulate
         $numberOfOwners = count($users);
 
         foreach ($tasks as $task) {
-            foreach ($users as $user) {
+            $numOwners = rand(1, count($users));
+
+            for ($i = 0; $i < $numOwners; $i++) {
+                $randomUserId = rand(1, count($users) - 1);
                 $taskOwnership = new TaskOwnership(
-                    ['task_id' => $task->id, 'user_id' => $user->id]
+                    ['task_id' => $task->id, 'user_id' => $randomUserId]
                 );
-                if ($user->id % 2 === 0 || $user->id === 0){$taskOwnership->save();}
+                $taskOwnership->save();
             }
         }
 

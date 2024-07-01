@@ -25,7 +25,11 @@ class TasksController extends Controller
     {
         $params = $request->getParams();
 
-        $task = $this->current_user->tasks()->find($params['id']);
+        if ($this->current_user->isAdmin()) {
+            $task = Task::findById($params['id']);
+        } else {
+            $task = $this->current_user->tasks()->find($params['id']);
+        }
 
         if ($task !== null) {
             $response = ['task' => $task];
@@ -60,8 +64,12 @@ class TasksController extends Controller
         $params = $request->getParams();
         $id = $params['id'];
 
-        /** @var ?Task $task */
-        $task = $this->current_user->tasks()->find($params['id']);
+        if ($this->current_user->isAdmin()) {
+            $task = Task::findById($params['id']);
+        } else {
+            /** @var ?Task $task */
+            $task = $this->current_user->tasks()->find($params['id']);
+        }
 
         if ($task !== null) {
             $task->removeOwners();
@@ -121,7 +129,11 @@ class TasksController extends Controller
     {
         $id = $request->getParam('id');
 
-        $task = $this->current_user->tasks()->find($id);
+        if ($this->current_user->isAdmin()) {
+            $task = Task::findById($id);
+        } else {
+            $task = $this->current_user->tasks()->find($id);
+        }
 
         if ($task !== null) {
             $response = ['task' => $task];

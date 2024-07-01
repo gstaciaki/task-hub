@@ -74,7 +74,6 @@ class Task extends Model
     public function reOpen(): void
     {
         $this->status = 'open';
-        $this->finished_at = '';
     }
 
     public function isTaskOwner(int $userId): bool
