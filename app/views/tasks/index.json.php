@@ -5,7 +5,7 @@ $tasks = $response['tasks'];
 
 foreach ($tasks as $task) {
     $arrayOwners = array_map(function ($user) {
-        return ['id' => $user->id, 'name' => $user->name, 'admin'=> $user->isAdmin()];
+        return ['id' => $user->id, 'name' => $user->name, 'admin' => $user->isAdmin()];
     }, $task->owners()->get());
 
     $tasksToJson[] = [

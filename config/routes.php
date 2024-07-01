@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profiles', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
-    
+
 
     // Admin Routes
     Route::middleware('admin')->group(function () {
