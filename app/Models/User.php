@@ -33,6 +33,7 @@ class User extends Model
     {
         Validations::notEmpty('name', $this);
         Validations::notEmpty('email', $this);
+        Validations::notEmpty('password', $this);
 
         Validations::uniqueness('email', $this);
 
