@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Comment;
+use App\Models\Task;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 
@@ -12,7 +13,8 @@ class CommentsController extends Controller
     {
         $taskId = $request->getParam("task_id");
 
-        $comments = Comment::where(['task_id' => $taskId]);
+        // $comments = Comment::where(['task_id' => $taskId]);
+        $comments = Task::findById($taskId)->comments()->get();
         $response = ['comments' => $comments];
 
         $this->render('comments/index', compact('response'));
