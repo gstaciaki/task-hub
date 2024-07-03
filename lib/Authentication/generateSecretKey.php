@@ -1,4 +1,5 @@
 <?php
+
 use Core\Constants\Constants;
 
 require __DIR__ . '/../../config/bootstrap.php';
@@ -13,5 +14,3 @@ try {
 } catch (Exception $e) {
     echo "An error occurred: " . $e->getMessage() . "\n";
 }
-
-?>

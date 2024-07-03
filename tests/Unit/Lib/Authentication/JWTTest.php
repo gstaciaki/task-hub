@@ -36,7 +36,7 @@ class JWTTest extends TestCase
 
         $mockJwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
             . '.eyJzdWIiOjEsImlhdCI6MTcxOTg4ODQxMSwiZXhwIjoxNzMwNjg4NDExLCJhZG1pbiI6dHJ1ZX0'
-            . '.-jSAMvlTOqMB74Jr5g4VJZHR4mO5xtz0aRaq7YLrOlg';
+            . '.H247QIE0RSFyuEZXF2P-Fj_vj5QnB6bINqh8gAu52-o';
         $this->assertEquals($mockJwt, JWT::encode($header, $payload));
     }
 
@@ -68,7 +68,7 @@ class JWTTest extends TestCase
 
         $mockJwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
             . '.eyJzdWIiOjEsImlhdCI6MTcxOTg4ODQxMSwiZXhwIjoxNzMwNjg4NDExLCJhZG1pbiI6dHJ1ZX0'
-            . '.-jSAMvlTOqMB74Jr5g4VJZHR4mO5xtz0aRaq7YLrOlg';
+            . '.H247QIE0RSFyuEZXF2P-Fj_vj5QnB6bINqh8gAu52-o';
 
         $decodedJwt = JWT::decode($mockJwt);
 
