@@ -28,7 +28,6 @@ class JWT
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(json_encode($payload)));
 
         $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::$SECRET_KEY, true);
-
         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
         return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
@@ -41,12 +40,22 @@ class JWT
         }
 
         $jwtComponents = explode(".", $jwt);
-        $encodedHeader = $jwtComponents[0];
-        $encodedPayload = $jwtComponents[1];
+        if (count($jwtComponents) !== 3) {
+            throw new \Exception('Invalid JWT structure');
+        }
 
-        $header = str_replace(['-', '_', ''], ['+', '/', '='], base64_decode($encodedHeader));
-        $payload = str_replace(['-', '_', ''], ['+', '/', '='], base64_decode($encodedPayload));
+        list($encodedHeader, $encodedPayload, $encodedSignature) = $jwtComponents;
 
-        return ['header' => json_decode($header, true), 'payload' => json_decode($payload, true)];
+        $header = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $encodedHeader)), true);
+        $payload = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $encodedPayload)), true);
+        $signatureProvided = base64_decode(str_replace(['-', '_'], ['+', '/'], $encodedSignature));
+
+        $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, self::$SECRET_KEY, true);
+
+        if (!hash_equals($signature, $signatureProvided)) {
+            throw new \Exception('Invalid JWT signature');
+        }
+
+        return ['header' => $header, 'payload' => $payload];
     }
 }
