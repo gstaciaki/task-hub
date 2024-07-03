@@ -77,5 +77,9 @@ function db:populate {
     docker compose exec php php database/Populate/populate.php
 }
 
+function secret:generate {
+    docker compose exec php php lib/Authentication/generateSecretKey.php
+}
+
 TIMEFORMAT=$'\nTask completed in %3lR'
 time ${@}
