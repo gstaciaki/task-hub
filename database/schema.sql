@@ -39,4 +39,13 @@ CREATE TABLE task_user_owners (
     user_id INT NOT NULL REFERENCES tasks(id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS users_sessions;
+
+CREATE TABLE users_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    jwt VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT NOW()
+);
+
 SET foreign_key_checks = 1;

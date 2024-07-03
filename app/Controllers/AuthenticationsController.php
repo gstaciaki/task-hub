@@ -15,25 +15,24 @@ class AuthenticationsController extends Controller
         if (isset($params['email'])) {
             $user = User::findByEmail($params['email']);
         } else {
-            http_response_code(400);
+            $this->responseCode = 400;
             exit;
         }
 
         if ($user && $user->authenticate($params['password'])) {
-            $id = Auth::login($user);
+            $response = Auth::login($user);
 
-            $this->render('authentications/login', compact('id'));
+            $this->render('authentications/login', compact('response'));
         } else {
-            http_response_code(401);
+            $this->responseCode = 401;
             exit;
         }
     }
 
     public function destroy(Request $request): void
     {
-        $user = Auth::user($request);
-
-        Auth::logout($user);
+        $token = str_replace('Bearer ', '', $request->getHeader('Authorization'));
+        Auth::logout($token);
         $this->render('authentications/logout');
     }
 }

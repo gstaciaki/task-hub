@@ -5,6 +5,7 @@ namespace Tests\Unit\Controllers;
 use App\Models\Task;
 use App\Models\TaskOwnership;
 use App\Models\User;
+use Lib\Authentication\Auth;
 
 class TasksControllerTest extends ControllerTestCase
 {
@@ -33,7 +34,7 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->get(
             action: 'index',
             controller: 'App\Controllers\TasksController',
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         foreach ($tasks as $task) {
@@ -63,7 +64,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'show',
             controller: 'App\Controllers\TasksController',
             params: ["id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -84,7 +85,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'show',
             controller: 'App\Controllers\TasksController',
             params: ["id" => 8545],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
@@ -93,7 +94,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'update',
             controller: 'App\Controllers\TasksController',
             params: ["id" => 8545],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
@@ -102,7 +103,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'destroy',
             controller: 'App\Controllers\TasksController',
             params: ["id" => 8545],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/not found/", $response);
@@ -124,7 +125,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'create',
             controller: 'App\Controllers\TasksController',
             params: ["title" => 'new task'],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
 
@@ -152,7 +153,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'create',
             controller: 'App\Controllers\TasksController',
             params: ["title" => ''],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/error/", $response);
@@ -161,7 +162,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'update',
             controller: 'App\Controllers\TasksController',
             params: ["title" => '', 'id' => 1, 'owners' => [1]],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/error/", $response);
@@ -187,7 +188,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'show',
             controller: 'App\Controllers\TasksController',
             params: ["id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -202,7 +203,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'update',
             controller: 'App\Controllers\TasksController',
             params: $data,
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/new title/", $response);
@@ -228,7 +229,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'show',
             controller: 'App\Controllers\TasksController',
             params: ["id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/{$task->title}/", $response);
@@ -244,7 +245,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'update',
             controller: 'App\Controllers\TasksController',
             params: $data,
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/new title/", $response);
@@ -272,7 +273,7 @@ class TasksControllerTest extends ControllerTestCase
             action: 'destroy',
             controller: 'App\Controllers\TasksController',
             params: ["id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertCount(0, Task::all());

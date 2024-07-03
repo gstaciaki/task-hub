@@ -1,3 +1,3 @@
 <?php
 
-$json = ["userId" => $id];
+$json = $response;
