@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Lib\Authentication;
 
-use Core\Constants\Constants;
 use Core\Http\Request;
 use Lib\Authentication\Auth;
 use App\Models\User;
+use Lib\Authentication\JWT;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -25,31 +25,49 @@ class AuthTest extends TestCase
             'password_confirmation' => '123456'
         ]);
         $this->user->save();
-        $this->request->addHeaders(['Authorization' => $this->user->id]);
     }
 
-    public function tearDown(): void
-    {
-        parent::setUp();
-        $_SESSION = [];
-    }
     public function test_login(): void
     {
-        $id = Auth::login($this->user);
-        $this->assertEquals(1, $id);
+        $auth = Auth::login($this->user);
+
+        $THREE_HOURS_IN_TIMESTAMP = 1000 * 60 * 60 * 3;
+        $header = [
+            "typ" => "JWT",
+            "alg" => "HS256"
+        ];
+        $payload = [
+            "sub" => $this->user->id,
+            "iat" => time(),
+            "exp" => time() + $THREE_HOURS_IN_TIMESTAMP,
+            "admin" => $this->user->isAdmin()
+        ];
+
+        $this->assertEquals(JWT::encode($header, $payload), $auth['accessToken']);
     }
+
+    public function test_check(): void
+    {
+        $this->request->addHeaders(['Authorization' => 'Bearer ' . Auth::login($this->user)['accessToken']]);
+        $this->assertTrue(Auth::check($this->request));
+    }
+
     public function test_user(): void
     {
-        Auth::login($this->user);
+        $this->request->addHeaders(['Authorization' => 'Bearer ' . Auth::login($this->user)['accessToken']]);
 
         $userFromSession = Auth::user($this->request);
 
         $this->assertEquals($this->user->id, $userFromSession->id);
     }
 
-    public function test_check(): void
+    public function test_logout(): void
     {
-        Auth::login($this->user);
+        $token = Auth::login($this->user)['accessToken'];
+        $this->request->addHeaders(['Authorization' => 'Bearer ' . $token]);
         $this->assertTrue(Auth::check($this->request));
+
+        Auth::logout($token);
+        $this->assertFalse(Auth::check($this->request));
     }
 }

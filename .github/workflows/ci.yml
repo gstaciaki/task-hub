@@ -17,6 +17,9 @@ jobs:
       - name: Create .env
         run: cp .env.example .env
 
+      - name: Create Secret Key
+        run: cp secret_key.example secret_key
+
       - name: Composer install
         run: ./run composer install
 

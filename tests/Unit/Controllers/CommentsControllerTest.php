@@ -5,6 +5,7 @@ namespace Tests\Unit\Controllers;
 use App\Models\Comment;
 use App\Models\Task;
 use App\Models\User;
+use Lib\Authentication\Auth;
 
 class CommentsControllerTest extends ControllerTestCase
 {
@@ -31,7 +32,7 @@ class CommentsControllerTest extends ControllerTestCase
             action: 'index',
             controller: 'App\Controllers\CommentsController',
             params: ["task_id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/{$comment1->description}/", $response);
@@ -58,7 +59,7 @@ class CommentsControllerTest extends ControllerTestCase
             action: 'show',
             controller: 'App\Controllers\CommentsController',
             params: ["id" => $comment->id, "task_id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertMatchesRegularExpression("/{$comment->description}/", $response);
@@ -83,7 +84,7 @@ class CommentsControllerTest extends ControllerTestCase
             action: 'create',
             controller: 'App\Controllers\CommentsController',
             params: ["task_id" => $task->id, "description" => 'New comment'],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertCount(1, Comment::all());
@@ -115,7 +116,7 @@ class CommentsControllerTest extends ControllerTestCase
             action: 'update',
             controller: 'App\Controllers\CommentsController',
             params: $data,
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $updatedComment = Comment::findById($comment->id);
@@ -145,7 +146,7 @@ class CommentsControllerTest extends ControllerTestCase
             action: 'destroy',
             controller: 'App\Controllers\CommentsController',
             params: ["id" => $comment->id, "task_id" => $task->id],
-            headers: ['Authorization' => 1]
+            headers: ['Authorization' => Auth::login($user)['accessToken']]
         );
 
         $this->assertCount(0, Comment::all());

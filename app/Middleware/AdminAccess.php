@@ -12,7 +12,7 @@ class AdminAccess implements Middleware
     {
         $user = Auth::user($request);
 
-        if (!$user->isAdmin()) {
+        if ($user == null || !$user->isAdmin()) {
             http_response_code(403);
             exit;
         }

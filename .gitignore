@@ -14,3 +14,6 @@
 # Ignore files and folders inside uploads but keep it
 /public/assets/uploads/*
 !/public/assets/uploads/.gitkeep
+
+# Ignore secret key
+secret_key
